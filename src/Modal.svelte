@@ -1,8 +1,30 @@
 <script>
-import { createEventDispatcher } from 'svelte'
+import { createEventDispatcher, onMount, onDestroy, beforeUpdate, afterUpdate} from 'svelte'
 const dispatch = createEventDispatcher()
 // export let showModal
-	let agreed=false
+  let agreed=false
+  let autoscroll = false
+
+  onMount(() => {
+    console.log('modal mounted')
+  })
+  onDestroy(() => {
+    console.log('modal destroyed')
+  })
+  beforeUpdate(() => {
+    console.log('going to update')
+    autoscroll = agreed
+  })
+  afterUpdate(() => {
+    console.log('updated')
+    if(autoscroll) {
+      const modal = document.querySelector('.modal')
+      modal.scrollTo(0, modal.scrollHeight)
+    }
+  })
+  
+  
+  $: console.log('Script executed.')
 
 $: console.log('agree:', agreed)
 </script>
@@ -54,7 +76,7 @@ $: console.log('agree:', agreed)
     top: 10vh;
     left: 10%;
     width: 80%;
-    max-height: 80vh;
+    max-height: 30vh;
     background: white;
     border-radius: 5px;
     z-index: 100;
